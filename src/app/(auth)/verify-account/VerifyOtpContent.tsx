@@ -35,7 +35,7 @@ export default function VerifyOtpContent() {
     setMessage("");
 
     try {
-      const res = await fetch("http://localhost:5071/api/Auth/verify-otp", {
+      const res = await fetch("https://jobship-backend-8.onrender.com/api/Auth/verify-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, otp }),

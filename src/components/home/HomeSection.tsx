@@ -106,7 +106,7 @@ export default function HomeSection() {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:5071/api/food');
+      const response = await fetch('https://jobship-backend-8.onrender.com/api/food');
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

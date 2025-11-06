@@ -1,6 +1,6 @@
 'use client'
 import Image from "next/image";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
 import MenuDive from "./menuButton/HoverDiv";
 import FadeInSection from "./FadeInItemNav";
@@ -15,7 +15,6 @@ import { useCart } from "@/context/CartContext";
 interface CartItem {
   id: string;
   quantity: number;
-  // Add other properties as needed based on your cart context
 }
 
 const navItems = [
@@ -25,7 +24,6 @@ const navItems = [
   { name: "Add Product", href: "/add-product" },
   { name: "About Us", href: "/about" },
   { name: "Contact Us", href: "/contact-us" },
-  
 ];
 
 export default function Header() {
@@ -33,12 +31,41 @@ export default function Header() {
   const pathname = usePathname();
   const [cartIsOpen, setCartIsOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   const { cartItems } = useCart();
 
   const handleClick = useCallback(() => {
     setIsOpen((prev) => !prev);
   }, []);
+
+  // Hide/Show header on scroll
+  useEffect(() => {
+    const controlHeader = () => {
+      if (typeof window !== 'undefined') {
+        const currentScrollY = window.scrollY;
+
+        if (currentScrollY > lastScrollY && currentScrollY > 100) {
+          // Scrolling down & past 100px - hide header
+          setIsVisible(false);
+        } else if (currentScrollY < lastScrollY) {
+          // Scrolling up - show header
+          setIsVisible(true);
+        }
+
+        setLastScrollY(currentScrollY);
+      }
+    };
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('scroll', controlHeader, { passive: true });
+
+      return () => {
+        window.removeEventListener('scroll', controlHeader);
+      };
+    }
+  }, [lastScrollY]);
 
   const totalItems = cartItems.reduce((sum: number, item: CartItem) => sum + item.quantity, 0);
 
@@ -47,7 +74,23 @@ export default function Header() {
       <MenuDive isOpen={isOpen} setIsOpen={setIsOpen} />
       <Cart isOpen={cartIsOpen} setIsOpen={setCartIsOpen} />
 
-      <header className="fixed top-0 left-0 right-0 flex justify-between items-center w-full bg-white shadow-sm border-b border-gray-200 max-md:pl-[6vw] md:pl-[3vw] lg:pl-[4vw] py-3 z-40">
+      <motion.header
+        className="fixed top-0 left-0 right-0 flex justify-between items-center w-full bg-white shadow-sm border-b border-gray-200 max-md:pl-[6vw] md:pl-[3vw] lg:pl-[4vw] py-3 z-40"
+        initial={{ y: 0 }}
+        animate={{ y: isVisible ? 0 : -100 }}
+        transition={{ 
+          type: "spring", 
+          stiffness: 300, 
+          damping: 30,
+          duration: 0.3
+        }}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0
+        }}
+      >
         
         {/* Mobile Menu Icon */}
         <button className="md:hidden" onClick={handleClick} aria-label="Open menu">
@@ -225,7 +268,7 @@ export default function Header() {
             </AnimatePresence>
           </div>
         </div>
-      </header>
+      </motion.header>
     </>
   );
 }

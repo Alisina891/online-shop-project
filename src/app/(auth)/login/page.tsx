@@ -22,7 +22,7 @@ export default function LoginPage() {
     setIsLoading(true);
     
     try {
-      const res = await fetch('http://localhost:5071/api/Auth/login', {
+      const res = await fetch('https://jobship-backend-8.onrender.com/api/Auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),

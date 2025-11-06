@@ -46,7 +46,7 @@ type User = {
 // تابع کمکی برای تماس API با مدیریت خطا
 const fetchOrdersFromAPI = async (token: string): Promise<OrderData[]> => {
   try {
-    const response = await fetch("http://localhost:5071/api/orders/user/my-orders", {
+    const response = await fetch("https://jobship-backend-8.onrender.com/api/orders/user/my-orders", {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -153,7 +153,7 @@ export default function MyOrdersPage() {
           
           // تلاش با endpoint جایگزین
           try {
-            const alternativeResponse = await fetch("http://localhost:5071/api/orders", {
+            const alternativeResponse = await fetch("https://jobship-backend-8.onrender.com/api/orders", {
               method: "GET",
               headers: {
                 "Authorization": `Bearer ${token}`,

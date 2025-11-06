@@ -173,7 +173,7 @@ export default function OrdersPage() {
         headers["Authorization"] = `Bearer ${token}`;
       }
 
-      const res = await fetch("http://localhost:5071/api/orders", {
+      const res = await fetch("https://jobship-backend-8.onrender.com/api/orders", {
         method: "POST",
         headers: headers,
         body: JSON.stringify(orderData),

@@ -84,7 +84,7 @@ const ProductForm: React.FC = () => {
     
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.post("http://localhost:5071/api/food", product, {
+      const response = await axios.post("https://jobship-backend-8.onrender.com/api/food", product, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
